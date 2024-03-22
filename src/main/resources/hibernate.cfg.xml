@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+        <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/kiki_invest_db</property>
+        <property name="hibernate.connection.password">postgres</property>
+        <property name="hibernate.connection.username">postgres</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+        <property name="hbm2ddl.auto">update</property>
+        <mapping class="org.katyshevtseva.invest.core.entity.Deposit"></mapping>
+        <mapping class="org.katyshevtseva.invest.core.entity.Share"></mapping>
+        <mapping class="org.katyshevtseva.invest.core.entity.DepositState"></mapping>
+        <mapping class="org.katyshevtseva.invest.core.entity.ShareState"></mapping>
+        <mapping class="org.katyshevtseva.invest.core.entity.Location"></mapping>
+        <mapping class="org.katyshevtseva.invest.core.entity.Bond"></mapping>
+    </session-factory>
+</hibernate-configuration>

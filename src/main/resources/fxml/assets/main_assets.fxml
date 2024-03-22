@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            xmlns="http://javafx.com/javafx">
+
+    <top>
+        <Pane minHeight="30" maxHeight="30"/>
+    </top>
+
+    <center>
+        <VBox>
+            <HBox>
+                <Button fx:id="addBondButton" text="Add bond"/>
+                <Pane minWidth="10" maxWidth="10"/>
+                <Button fx:id="addShareButton" text="Add share"/>
+                <Pane minWidth="10" maxWidth="10"/>
+                <Button fx:id="addDepositButton" text="Add deposit"/>
+            </HBox>
+
+            <Pane minHeight="20" maxHeight="20"/>
+            <HBox>
+                <TableView fx:id="table">
+                    <columns>
+                        <TableColumn prefWidth="200" text="location" fx:id="locationColumn"/>
+                        <TableColumn prefWidth="200" text="title" fx:id="titleColumn"/>
+                        <TableColumn prefWidth="100" text="type" fx:id="typeColumn"/>
+                        <TableColumn prefWidth="100" text="AI" fx:id="aiColumn"/>
+                        <TableColumn prefWidth="400" text="More" fx:id="moreColumn"/>
+                    </columns>
+                </TableView>
+                <Pane minWidth="10" maxWidth="10"/>
+                <VBox fx:id="detailBox"/>
+            </HBox>
+
+
+        </VBox>
+    </center>
+
+    <left>
+        <Pane minWidth="30" maxWidth="30"/>
+    </left>
+
+    <right>
+        <Pane minWidth="30" maxWidth="30"/>
+    </right>
+
+    <bottom>
+        <Pane minHeight="30" maxHeight="30"/>
+    </bottom>
+
+</BorderPane>

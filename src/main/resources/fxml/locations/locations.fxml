@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.*?>
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            xmlns="http://javafx.com/javafx">
+
+    <top>
+        <Pane minHeight="30" maxHeight="30"/>
+    </top>
+
+    <center>
+        <VBox>
+            <Button fx:id="addLocationButton" text="Add location"/>
+            <Pane minHeight="20" maxHeight="20"/>
+            <VBox fx:id="locationsBox"/>
+        </VBox>
+
+    </center>
+
+    <left>
+        <Pane minWidth="30" maxWidth="30"/>
+    </left>
+
+    <right>
+        <Pane minWidth="30" maxWidth="30"/>
+    </right>
+
+    <bottom>
+        <Pane minHeight="30" maxHeight="30"/>
+    </bottom>
+
+</BorderPane>

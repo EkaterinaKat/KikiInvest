@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<HBox xmlns:fx="http://javafx.com/fxml"
+      xmlns="http://javafx.com/javafx">
+
+    <VBox maxWidth="250" minWidth="200" styleClass="brightBackground">
+        <GridPane vgap="40" alignment="CENTER">
+            <VBox fx:id="buttonBox" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+        </GridPane>
+    </VBox>
+
+    <Pane fx:id="mainPane"/>
+
+</HBox>
