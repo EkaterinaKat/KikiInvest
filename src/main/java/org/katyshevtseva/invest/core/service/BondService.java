@@ -4,6 +4,7 @@ import org.katyshevtseva.invest.core.Dao;
 import org.katyshevtseva.invest.core.entity.Bond;
 import org.katyshevtseva.invest.core.entity.Location;
 
+import java.util.Date;
 import java.util.List;
 
 public class BondService {
@@ -12,11 +13,12 @@ public class BondService {
         return Dao.getAllBonds();
     }
 
-    public static void save(Bond existing, String title, Location location, Float purchasePrice, Float annualInterest) {
+    public static void save(Bond existing, String title, Location location, Float purchasePrice,
+                            Float annualInterest, Date purchaseDate) {
         if (existing == null) {
-            Dao.saveNew(new Bond(title, location, purchasePrice, false, annualInterest));
+            Dao.saveNew(new Bond(title, location, purchasePrice, purchaseDate, false, annualInterest));
         } else {
-            existing.setValues(title, location, purchasePrice, annualInterest);
+            existing.setValues(title, location, purchasePrice, annualInterest, purchaseDate);
             Dao.saveEdited(existing);
         }
     }

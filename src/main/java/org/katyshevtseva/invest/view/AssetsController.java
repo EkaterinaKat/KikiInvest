@@ -3,10 +3,7 @@ package org.katyshevtseva.invest.view;
 import com.katyshevtseva.fx.LabelBuilder;
 import com.katyshevtseva.fx.Styler;
 import com.katyshevtseva.fx.TableUtils;
-import com.katyshevtseva.fx.dialogconstructor.DcComboBox;
-import com.katyshevtseva.fx.dialogconstructor.DcFloatNumField;
-import com.katyshevtseva.fx.dialogconstructor.DcTextField;
-import com.katyshevtseva.fx.dialogconstructor.DialogConstructor;
+import com.katyshevtseva.fx.dialogconstructor.*;
 import com.katyshevtseva.fx.switchcontroller.SectionController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,6 +17,8 @@ import org.katyshevtseva.invest.core.entity.Deposit;
 import org.katyshevtseva.invest.core.entity.Location;
 import org.katyshevtseva.invest.core.entity.Share;
 import org.katyshevtseva.invest.core.service.*;
+
+import java.util.Date;
 
 import static com.katyshevtseva.fx.Styler.StandardColor.GRAY;
 import static com.katyshevtseva.fx.Styler.ThingToColor.BACKGROUND;
@@ -68,6 +67,7 @@ public class AssetsController implements SectionController {
                 LocationService.getLocations());
         DcFloatNumField purchasePriceField = new DcFloatNumField(true, newBond ? null : bond.getPurchasePrice(),
                 "purchase price");
+        DcDatePicker datePicker = new DcDatePicker(true, newBond ? new Date() : bond.getPurchaseDate());
         DcFloatNumField aiPriceField = new DcFloatNumField(true, newBond ? null : bond.getAnnualInterest(),
                 "annual interest");
 
@@ -77,9 +77,10 @@ public class AssetsController implements SectionController {
                     titleField.getValue(),
                     locationDcComboBox.getValue(),
                     purchasePriceField.getValue(),
-                    aiPriceField.getValue());
+                    aiPriceField.getValue(),
+                    datePicker.getValue());
             updateContent();
-        }, locationDcComboBox, titleField, purchasePriceField, aiPriceField);
+        }, locationDcComboBox, titleField, purchasePriceField, aiPriceField, datePicker);
     }
 
     private void openDepositEditDialog(Deposit deposit) {
@@ -91,6 +92,7 @@ public class AssetsController implements SectionController {
                 "amount");
         DcFloatNumField aiPriceField = new DcFloatNumField(true, newDeposit ? null : deposit.getAnnualInterest(),
                 "annual interest");
+        DcDatePicker datePicker = new DcDatePicker(true, newDeposit ? new Date() : deposit.getOpenDate());
 
         DialogConstructor.constructDialog(() -> {
             DepositService.save(
@@ -98,9 +100,10 @@ public class AssetsController implements SectionController {
                     titleField.getValue(),
                     amountField.getValue(),
                     locationDcComboBox.getValue(),
-                    aiPriceField.getValue());
+                    aiPriceField.getValue(),
+                    datePicker.getValue());
             updateContent();
-        }, locationDcComboBox, titleField, amountField, aiPriceField);
+        }, locationDcComboBox, titleField, amountField, aiPriceField, datePicker);
     }
 
     private void openShareEditDialog(Share share) {
@@ -110,15 +113,17 @@ public class AssetsController implements SectionController {
                 LocationService.getLocations());
         DcFloatNumField purchasePriceField = new DcFloatNumField(true, newShare ? null : share.getPurchasePrice(),
                 "purchase price");
+        DcDatePicker datePicker = new DcDatePicker(true, newShare ? new Date() : share.getPurchaseDate());
 
         DialogConstructor.constructDialog(() -> {
             ShareService.save(
                     share,
                     titleField.getValue(),
                     locationDcComboBox.getValue(),
-                    purchasePriceField.getValue());
+                    purchasePriceField.getValue(),
+                    datePicker.getValue());
             updateContent();
-        }, locationDcComboBox, titleField, purchasePriceField);
+        }, locationDcComboBox, titleField, purchasePriceField, datePicker);
     }
 
 

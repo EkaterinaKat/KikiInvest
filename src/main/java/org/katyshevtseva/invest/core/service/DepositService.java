@@ -4,6 +4,7 @@ import org.katyshevtseva.invest.core.Dao;
 import org.katyshevtseva.invest.core.entity.Deposit;
 import org.katyshevtseva.invest.core.entity.Location;
 
+import java.util.Date;
 import java.util.List;
 
 public class DepositService {
@@ -12,11 +13,12 @@ public class DepositService {
         return Dao.getAllDeposits();
     }
 
-    public static void save(Deposit existing, String title, Float amount, Location location, Float annualInterest) {
+    public static void save(Deposit existing, String title, Float amount, Location location,
+                            Float annualInterest, Date purchaseDate) {
         if (existing == null) {
-            Dao.saveNew(new Deposit(title, amount, location, annualInterest, false));
+            Dao.saveNew(new Deposit(title, amount, location, purchaseDate, annualInterest, false));
         } else {
-            existing.setValues(title, amount, location, annualInterest);
+            existing.setValues(title, amount, location, purchaseDate, annualInterest);
             Dao.saveEdited(existing);
         }
     }

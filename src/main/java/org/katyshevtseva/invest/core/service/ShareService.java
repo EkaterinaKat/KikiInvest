@@ -4,6 +4,7 @@ import org.katyshevtseva.invest.core.Dao;
 import org.katyshevtseva.invest.core.entity.Location;
 import org.katyshevtseva.invest.core.entity.Share;
 
+import java.util.Date;
 import java.util.List;
 
 public class ShareService {
@@ -12,11 +13,11 @@ public class ShareService {
         return Dao.getAllShares();
     }
 
-    public static void save(Share existing, String title, Location location, Float purchasePrice) {
+    public static void save(Share existing, String title, Location location, Float purchasePrice, Date purchaseDate) {
         if (existing == null) {
-            Dao.saveNew(new Share(title, location, purchasePrice, false));
+            Dao.saveNew(new Share(title, location, purchasePrice, purchaseDate, false));
         } else {
-            existing.setValues(title, location, purchasePrice);
+            existing.setValues(title, location, purchasePrice, purchaseDate);
             Dao.saveEdited(existing);
         }
     }

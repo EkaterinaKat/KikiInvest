@@ -1,10 +1,12 @@
 package org.katyshevtseva.invest.core.entity;
 
+import com.katyshevtseva.date.DateUtils;
 import lombok.Data;
 import org.katyshevtseva.invest.core.Asset;
 import org.katyshevtseva.invest.core.AssetType;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.Set;
 
 @Data
@@ -17,6 +19,9 @@ public class Deposit implements Asset {
     private String title;
 
     private Float amount;
+
+    @Temporal(TemporalType.DATE)
+    private Date openDate;
 
     @ManyToOne
     @JoinColumn(name = "location_id")
@@ -32,19 +37,21 @@ public class Deposit implements Asset {
     public Deposit() {
     }
 
-    public Deposit(String title, Float amount, Location location, Float annualInterest, boolean closed) {
+    public Deposit(String title, Float amount, Location location, Date openDate, Float annualInterest, boolean closed) {
         this.title = title;
         this.amount = amount;
         this.location = location;
         this.annualInterest = annualInterest;
         this.closed = closed;
+        this.openDate = openDate;
     }
 
-    public void setValues(String title, Float amount, Location location, Float annualInterest) {
+    public void setValues(String title, Float amount, Location location, Date openDate, Float annualInterest) {
         this.title = title;
         this.amount = amount;
         this.location = location;
         this.annualInterest = annualInterest;
+        this.openDate = openDate;
     }
 
     @Override
@@ -72,8 +79,14 @@ public class Deposit implements Asset {
         return title + "\n" +
                 "amount=" + amount + "\n" +
                 "location=" + location + "\n" +
+                getOpenDateString() +
                 "states=" + states + "\n" +
                 "annualInterest=" + annualInterest + "\n" +
                 "closed=" + closed;
+    }
+
+    private String getOpenDateString() {
+        return openDate == null ? "" :
+                "openDate=" + DateUtils.READABLE_DATE_FORMAT.format(openDate) + "\n";
     }
 }
