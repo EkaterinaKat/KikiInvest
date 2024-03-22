@@ -59,8 +59,7 @@ public class Deposit implements Asset {
 
     @Override
     public String getOtherInfo() {
-        return "amount=" + amount +
-                ", closed=" + closed;
+        return "amount=" + amount;
     }
 
     @Override

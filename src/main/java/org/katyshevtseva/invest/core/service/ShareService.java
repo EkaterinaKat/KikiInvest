@@ -20,4 +20,9 @@ public class ShareService {
             Dao.saveEdited(existing);
         }
     }
+
+    public static void close(Share share) {
+        share.setSold(!share.isSold());
+        Dao.saveEdited(share);
+    }
 }

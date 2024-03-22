@@ -21,6 +21,7 @@ import org.katyshevtseva.invest.core.entity.Location;
 import org.katyshevtseva.invest.core.entity.Share;
 import org.katyshevtseva.invest.core.service.*;
 
+import static com.katyshevtseva.fx.Styler.StandardColor.GRAY;
 import static com.katyshevtseva.fx.Styler.ThingToColor.BACKGROUND;
 
 public class AssetsController implements SectionController {
@@ -126,6 +127,7 @@ public class AssetsController implements SectionController {
         entries.addAll(AssetService.getAssets());
         table.getItems().clear();
         table.setItems(entries);
+        detailBox.getChildren().clear();
     }
 
     private void tuneColumns() {
@@ -138,7 +140,9 @@ public class AssetsController implements SectionController {
 
     private void setupRows() {
         TableUtils.adjustRows(table, (asset, control) -> {
-            control.setStyle(Styler.getColorfullStyle(BACKGROUND, asset.getType().getColor()));
+            control.setStyle(Styler.getColorfullStyle(BACKGROUND,
+                    (asset.isActive() ? asset.getType().getColor() : GRAY.getCode())));
+
             if (asset instanceof Bond)
                 control.setContextMenu(getContextMenu((Bond) asset));
             if (asset instanceof Share)
@@ -154,27 +158,32 @@ public class AssetsController implements SectionController {
         detailBox.getChildren().add(new LabelBuilder().width(400).text(asset.toString()).build());
     }
 
-    private ContextMenu getContextMenu(Bond bond) {
+    private ContextMenu getContextMenu(Asset asset) {
         ContextMenu contextMenu = new ContextMenu();
-        MenuItem editItem = new MenuItem("Edit");
-        editItem.setOnAction(event -> openBondEditDialog(bond));
-        contextMenu.getItems().add(editItem);
-        return contextMenu;
-    }
 
-    private ContextMenu getContextMenu(Share share) {
-        ContextMenu contextMenu = new ContextMenu();
         MenuItem editItem = new MenuItem("Edit");
-        editItem.setOnAction(event -> openShareEditDialog(share));
+        editItem.setOnAction(event -> {
+            if (asset instanceof Bond)
+                openBondEditDialog((Bond) asset);
+            if (asset instanceof Share)
+                openShareEditDialog((Share) asset);
+            if (asset instanceof Deposit)
+                openDepositEditDialog((Deposit) asset);
+        });
         contextMenu.getItems().add(editItem);
-        return contextMenu;
-    }
 
-    private ContextMenu getContextMenu(Deposit deposit) {
-        ContextMenu contextMenu = new ContextMenu();
-        MenuItem editItem = new MenuItem("Edit");
-        editItem.setOnAction(event -> openDepositEditDialog(deposit));
-        contextMenu.getItems().add(editItem);
+        MenuItem closeItem = new MenuItem("Close");
+        closeItem.setOnAction(event -> {
+            if (asset instanceof Bond)
+                BondService.close((Bond) asset);
+            if (asset instanceof Share)
+                ShareService.close((Share) asset);
+            if (asset instanceof Deposit)
+                DepositService.close((Deposit) asset);
+            updateContent();
+        });
+        contextMenu.getItems().add(closeItem);
+
         return contextMenu;
     }
 }

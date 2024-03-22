@@ -55,8 +55,7 @@ public class Share implements Asset {
 
     @Override
     public String getOtherInfo() {
-        return "purchasePrice=" + purchasePrice +
-                ", sold=" + sold;
+        return "purchasePrice=" + purchasePrice;
     }
 
     @Override

@@ -57,8 +57,7 @@ public class Bond implements Asset {
 
     @Override
     public String getOtherInfo() {
-        return "purchasePrice=" + purchasePrice +
-                ", repaid=" + repaid;
+        return "purchasePrice=" + purchasePrice;
     }
 
     @Override

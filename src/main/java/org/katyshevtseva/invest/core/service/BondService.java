@@ -20,4 +20,9 @@ public class BondService {
             Dao.saveEdited(existing);
         }
     }
+
+    public static void close(Bond bond) {
+        bond.setRepaid(!bond.isRepaid());
+        Dao.saveEdited(bond);
+    }
 }

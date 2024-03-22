@@ -20,4 +20,9 @@ public class DepositService {
             Dao.saveEdited(existing);
         }
     }
+
+    public static void close(Deposit deposit) {
+        deposit.setClosed(!deposit.isClosed());
+        Dao.saveEdited(deposit);
+    }
 }
