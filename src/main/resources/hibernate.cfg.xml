@@ -16,5 +16,7 @@
         <mapping class="org.katyshevtseva.invest.core.entity.ShareState"></mapping>
         <mapping class="org.katyshevtseva.invest.core.entity.Location"></mapping>
         <mapping class="org.katyshevtseva.invest.core.entity.Bond"></mapping>
+        <mapping class="org.katyshevtseva.invest.core.entity.Account"></mapping>
+        <mapping class="org.katyshevtseva.invest.core.entity.Transaction"></mapping>
     </session-factory>
 </hibernate-configuration>

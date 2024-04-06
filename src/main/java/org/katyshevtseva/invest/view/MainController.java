@@ -13,8 +13,7 @@ import javafx.scene.layout.VBox;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.katyshevtseva.invest.view.ViewConstants.InvestNodeInfo.ASSETS;
-import static org.katyshevtseva.invest.view.ViewConstants.InvestNodeInfo.LOCATIONS;
+import static org.katyshevtseva.invest.view.ViewConstants.InvestNodeInfo.*;
 
 public class MainController extends AbstractSwitchController implements FxController {
     @FXML
@@ -32,7 +31,9 @@ public class MainController extends AbstractSwitchController implements FxContro
                 new Section("Assets", new AssetsController(),
                         controller -> WindowBuilder.getNode(ASSETS, controller)),
                 new Section("Locations", new LocationsController(),
-                        controller -> WindowBuilder.getNode(LOCATIONS, controller)));
+                        controller -> WindowBuilder.getNode(LOCATIONS, controller)),
+                new Section("Accounts", new AccountsController(),
+                        controller -> WindowBuilder.getNode(ACCOUNTS, controller)));
     }
 
     private void placeButton(Button button) {

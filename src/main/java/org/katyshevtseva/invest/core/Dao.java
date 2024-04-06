@@ -1,10 +1,7 @@
 package org.katyshevtseva.invest.core;
 
 import com.katyshevtseva.hibernate.CoreDao;
-import org.katyshevtseva.invest.core.entity.Bond;
-import org.katyshevtseva.invest.core.entity.Deposit;
-import org.katyshevtseva.invest.core.entity.Location;
-import org.katyshevtseva.invest.core.entity.Share;
+import org.katyshevtseva.invest.core.entity.*;
 
 import java.util.List;
 
@@ -25,6 +22,14 @@ public class Dao {
 
     public static List<Location> getAllLocations() {
         return coreDao.getAll(Location.class.getSimpleName());
+    }
+
+    public static List<Account> getAllAccounts() {
+        return coreDao.getAll(Account.class.getSimpleName());
+    }
+
+    public static List<Transaction> getAllTransactions() {
+        return coreDao.getAll(Transaction.class.getSimpleName());
     }
 
     public static List<Bond> getAllBonds() {
