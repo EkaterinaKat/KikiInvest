@@ -27,9 +27,6 @@ public class Deposit implements Asset {
     @JoinColumn(name = "location_id")
     private Location location;
 
-    @OneToMany(mappedBy = "deposit")
-    private Set<DepositState> states;
-
     private Float annualInterest;
 
     private boolean closed;
@@ -80,7 +77,6 @@ public class Deposit implements Asset {
                 "amount=" + amount + "\n" +
                 "location=" + location + "\n" +
                 getOpenDateString() +
-                "states=" + states + "\n" +
                 "annualInterest=" + annualInterest + "\n" +
                 "closed=" + closed;
     }

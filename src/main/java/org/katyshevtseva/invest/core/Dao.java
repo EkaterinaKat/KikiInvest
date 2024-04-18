@@ -28,10 +28,6 @@ public class Dao {
         return coreDao.getAll(Account.class.getSimpleName());
     }
 
-    public static List<Transaction> getAllTransactions() {
-        return coreDao.getAll(Transaction.class.getSimpleName());
-    }
-
     public static List<Bond> getAllBonds() {
         return coreDao.getAll(Bond.class.getSimpleName());
     }

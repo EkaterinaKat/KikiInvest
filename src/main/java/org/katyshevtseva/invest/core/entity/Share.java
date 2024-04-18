@@ -29,9 +29,6 @@ public class Share implements Asset {
 
     private boolean sold;
 
-    @OneToMany(mappedBy = "share")
-    private Set<ShareState> states;
-
     public Share() {
     }
 
@@ -76,8 +73,7 @@ public class Share implements Asset {
                 "location=" + location + "\n" +
                 "purchasePrice=" + purchasePrice + "\n" +
                 "purchaseDate=" + DateUtils.READABLE_DATE_FORMAT.format(purchaseDate) + "\n" +
-                "sold=" + sold + "\n" +
-                "states=" + states;
+                "sold=" + sold;
     }
 }
 

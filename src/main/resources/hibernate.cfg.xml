@@ -12,11 +12,8 @@
         <property name="hbm2ddl.auto">update</property>
         <mapping class="org.katyshevtseva.invest.core.entity.Deposit"></mapping>
         <mapping class="org.katyshevtseva.invest.core.entity.Share"></mapping>
-        <mapping class="org.katyshevtseva.invest.core.entity.DepositState"></mapping>
-        <mapping class="org.katyshevtseva.invest.core.entity.ShareState"></mapping>
         <mapping class="org.katyshevtseva.invest.core.entity.Location"></mapping>
         <mapping class="org.katyshevtseva.invest.core.entity.Bond"></mapping>
         <mapping class="org.katyshevtseva.invest.core.entity.Account"></mapping>
-        <mapping class="org.katyshevtseva.invest.core.entity.Transaction"></mapping>
     </session-factory>
 </hibernate-configuration>
