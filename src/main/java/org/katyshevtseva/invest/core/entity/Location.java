@@ -1,6 +1,7 @@
 package org.katyshevtseva.invest.core.entity;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,6 +10,7 @@ import javax.persistence.Id;
 
 @Data
 @Entity
+@NoArgsConstructor
 public class Location {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,9 +20,6 @@ public class Location {
 
     public Location(String title) {
         this.title = title;
-    }
-
-    public Location() {
     }
 
     @Override

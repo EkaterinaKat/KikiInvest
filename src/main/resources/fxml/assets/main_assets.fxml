@@ -12,28 +12,25 @@
     <center>
         <VBox>
             <HBox>
-                <Button fx:id="addBondButton" text="Add bond"/>
-                <Pane minWidth="10" maxWidth="10"/>
-                <Button fx:id="addShareButton" text="Add share"/>
-                <Pane minWidth="10" maxWidth="10"/>
-                <Button fx:id="addDepositButton" text="Add deposit"/>
+                <Button fx:id="addAssetButton" text="Add asset"/>
             </HBox>
 
             <Pane minHeight="20" maxHeight="20"/>
             <HBox>
                 <TableView fx:id="table">
                     <columns>
-                        <TableColumn prefWidth="200" text="location" fx:id="locationColumn"/>
-                        <TableColumn prefWidth="200" text="title" fx:id="titleColumn"/>
+                        <TableColumn prefWidth="150" text="location" fx:id="locationColumn"/>
+                        <TableColumn prefWidth="150" text="title" fx:id="titleColumn"/>
                         <TableColumn prefWidth="100" text="type" fx:id="typeColumn"/>
-                        <TableColumn prefWidth="100" text="AI" fx:id="aiColumn"/>
-                        <TableColumn prefWidth="400" text="More" fx:id="moreColumn"/>
+                        <TableColumn prefWidth="150" text="pur. price" fx:id="purchasePriceColumn"/>
+                        <TableColumn prefWidth="150" text="pur. date" fx:id="purchaseDateColumn"/>
+                        <TableColumn prefWidth="150" text="sold" fx:id="soldColumn"/>
+                        <TableColumn prefWidth="150" text="comment" fx:id="commentColumn"/>
                     </columns>
                 </TableView>
                 <Pane minWidth="10" maxWidth="10"/>
                 <VBox fx:id="detailBox"/>
             </HBox>
-
 
         </VBox>
     </center>

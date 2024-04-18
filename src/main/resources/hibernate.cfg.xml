@@ -10,10 +10,13 @@
         <property name="hibernate.connection.username">postgres</property>
         <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
         <property name="hbm2ddl.auto">update</property>
-        <mapping class="org.katyshevtseva.invest.core.entity.Deposit"></mapping>
-        <mapping class="org.katyshevtseva.invest.core.entity.Share"></mapping>
         <mapping class="org.katyshevtseva.invest.core.entity.Location"></mapping>
-        <mapping class="org.katyshevtseva.invest.core.entity.Bond"></mapping>
+        <mapping class="org.katyshevtseva.invest.core.entity.Asset"></mapping>
+        <mapping class="org.katyshevtseva.invest.core.entity.Payment"></mapping>
+        <mapping class="org.katyshevtseva.invest.core.entity.Purchase"></mapping>
+        <mapping class="org.katyshevtseva.invest.core.entity.Replenishment"></mapping>
+        <mapping class="org.katyshevtseva.invest.core.entity.Sale"></mapping>
+        <mapping class="org.katyshevtseva.invest.core.entity.Withdrawal"></mapping>
         <mapping class="org.katyshevtseva.invest.core.entity.Account"></mapping>
     </session-factory>
 </hibernate-configuration>

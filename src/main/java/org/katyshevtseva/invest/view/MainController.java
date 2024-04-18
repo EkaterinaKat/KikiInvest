@@ -30,10 +30,10 @@ public class MainController extends AbstractSwitchController implements FxContro
         return Arrays.asList(
                 new Section("Assets", new AssetsController(),
                         controller -> WindowBuilder.getNode(ASSETS, controller)),
-                new Section("Locations", new LocationsController(),
-                        controller -> WindowBuilder.getNode(LOCATIONS, controller)),
                 new Section("Accounts", new AccountsController(),
-                        controller -> WindowBuilder.getNode(ACCOUNTS, controller)));
+                        controller -> WindowBuilder.getNode(ACCOUNTS, controller)),
+                new Section("Locations", new LocationsController(),
+                        controller -> WindowBuilder.getNode(LOCATIONS, controller)));
     }
 
     private void placeButton(Button button) {

@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.control.Label?>
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             xmlns="http://javafx.com/javafx">
 
@@ -15,12 +14,20 @@
             <Button fx:id="addAccountButton" text="Add account"/>
             <Pane minHeight="20" maxHeight="20"/>
             <HBox>
-                <VBox fx:id="accountsBox"/>
+                <GridPane fx:id="accountsPane" alignment="CENTER" maxWidth="240" minWidth="240" vgap="10"/>
                 <Pane minWidth="15" maxWidth="15"/>
                 <VBox>
-                    <Label fx:id="balanceLabel"/>
+                    <Label fx:id="infoLabel" styleClass="font_size_25"/>
                     <Pane minHeight="20" maxHeight="20"/>
-                    <GridPane fx:id="operationsPane"/>
+                    <TableView fx:id="operationTable">
+                        <columns>
+                            <TableColumn prefWidth="100" text="date" fx:id="dateColumn"/>
+                            <TableColumn prefWidth="100" text="amount" fx:id="amountColumn"/>
+                            <TableColumn prefWidth="200" text="from" fx:id="fromColumn"/>
+                            <TableColumn prefWidth="200" text="to" fx:id="toColumn"/>
+                            <TableColumn prefWidth="400" text="comment" fx:id="commentColumn"/>
+                        </columns>
+                    </TableView>
                 </VBox>
             </HBox>
         </VBox>

@@ -26,4 +26,23 @@ public class Account {
         this.location = location;
         this.amount = amount;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Account account = (Account) o;
+
+        return id.equals(account.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
+
+    public String getFullInfo() {
+        return String.format("%s (%s)\n * %.2f * ", title, location.getTitle(), amount);
+    }
 }
