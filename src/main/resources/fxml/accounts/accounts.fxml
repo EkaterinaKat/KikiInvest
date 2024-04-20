@@ -17,7 +17,15 @@
                 <GridPane fx:id="accountsPane" alignment="CENTER" maxWidth="240" minWidth="240" vgap="10"/>
                 <Pane minWidth="15" maxWidth="15"/>
                 <VBox>
-                    <Label fx:id="infoLabel" styleClass="font_size_25"/>
+                    <HBox>
+                        <Label fx:id="infoLabel" styleClass="font_size_25"/>
+                        <Pane minWidth="25" maxWidth="25"/>
+                        <Button fx:id="editButton" text="Edit" visible="false"/>
+                        <Pane minWidth="25" maxWidth="25"/>
+                        <Button fx:id="replenishButton" text="Replenish" visible="false"/>
+                        <Pane minWidth="15" maxWidth="15"/>
+                        <Button fx:id="withdrawButton" text="Withdraw" visible="false"/>
+                    </HBox>
                     <Pane minHeight="20" maxHeight="20"/>
                     <TableView fx:id="operationTable">
                         <columns>

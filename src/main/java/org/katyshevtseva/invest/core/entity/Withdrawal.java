@@ -27,6 +27,13 @@ public class Withdrawal implements Operation {
     @JoinColumn(name = "from_id")
     private Account from;
 
+    public void setValues(Date date, Float amount, String comment, Account from) {
+        this.date = date;
+        this.amount = amount;
+        this.comment = comment;
+        this.from = from;
+    }
+
     @Override
     public String getFromString() {
         return from.getTitle();

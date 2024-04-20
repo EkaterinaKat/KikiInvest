@@ -27,6 +27,13 @@ public class Replenishment implements Operation {
     @JoinColumn(name = "to_id")
     private Account to;
 
+    public void setValues(Date date, Float amount, String comment, Account to) {
+        this.date = date;
+        this.amount = amount;
+        this.comment = comment;
+        this.to = to;
+    }
+
     @Override
     public String getFromString() {
         return "-";

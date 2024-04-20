@@ -1,9 +1,9 @@
 package org.katyshevtseva.invest.view;
 
 import com.katyshevtseva.fx.LabelBuilder;
-import com.katyshevtseva.fx.dialogconstructor.DcComboBox;
-import com.katyshevtseva.fx.dialogconstructor.DcTextField;
-import com.katyshevtseva.fx.dialogconstructor.DialogConstructor;
+import com.katyshevtseva.fx.Styler;
+import com.katyshevtseva.fx.TableUtils;
+import com.katyshevtseva.fx.dialogconstructor.*;
 import com.katyshevtseva.fx.switchcontroller.SectionController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,14 +14,17 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import org.katyshevtseva.invest.core.entity.Account;
 import org.katyshevtseva.invest.core.entity.Location;
-import org.katyshevtseva.invest.core.service.AccountService;
-import org.katyshevtseva.invest.core.service.LocationService;
-import org.katyshevtseva.invest.core.service.Operation;
-import org.katyshevtseva.invest.core.service.OperationService;
+import org.katyshevtseva.invest.core.entity.Replenishment;
+import org.katyshevtseva.invest.core.entity.Withdrawal;
+import org.katyshevtseva.invest.core.service.*;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.katyshevtseva.fx.Styler.StandardColor.ORANGE;
+import static com.katyshevtseva.fx.Styler.StandardColor.SCREAMING_GREEN;
+import static com.katyshevtseva.fx.Styler.ThingToColor.BACKGROUND;
 
 public class AccountsController implements SectionController {
     @FXML
@@ -42,6 +45,12 @@ public class AccountsController implements SectionController {
     private TableColumn<Operation, String> toColumn;
     @FXML
     private TableColumn<Operation, String> commentColumn;
+    @FXML
+    private Button replenishButton;
+    @FXML
+    private Button withdrawButton;
+    @FXML
+    private Button editButton;
     private Map<Long, Label> accountIdPointLabelMap;
 
     @FXML
@@ -54,6 +63,34 @@ public class AccountsController implements SectionController {
     @Override
     public void update() {
         fillAccountTable(null);
+    }
+
+    private void openReplenishmentEditDialog(Replenishment replenishment, Account account) {
+        boolean newReplenishment = replenishment == null;
+
+        DcTextArea commentField = new DcTextArea(false, newReplenishment ? "" : replenishment.getComment());
+        DcDatePicker datePicker = new DcDatePicker(true, newReplenishment ? null : replenishment.getDate());
+        DcFloatNumField amountField = new DcFloatNumField(true, newReplenishment ? null : replenishment.getAmount());
+
+        DialogConstructor.constructDialog(() -> {
+            ReplenishmentService.save(replenishment, datePicker.getValue(), amountField.getValue(),
+                    commentField.getValue(), account);
+            fillAccountTable(account);
+        }, datePicker, amountField, commentField);
+    }
+
+    private void openWithdrawalEditDialog(Withdrawal withdrawal, Account account) {
+        boolean newWithdrawal = withdrawal == null;
+
+        DcTextArea commentField = new DcTextArea(false, newWithdrawal ? "" : withdrawal.getComment());
+        DcDatePicker datePicker = new DcDatePicker(true, newWithdrawal ? null : withdrawal.getDate());
+        DcFloatNumField amountField = new DcFloatNumField(true, newWithdrawal ? null : withdrawal.getAmount());
+
+        DialogConstructor.constructDialog(() -> {
+            WithdrawalService.save(withdrawal, datePicker.getValue(), amountField.getValue(),
+                    commentField.getValue(), account);
+            fillAccountTable(account);
+        }, datePicker, amountField, commentField);
     }
 
     private void openAccountEditDialog(Account account) {
@@ -76,7 +113,6 @@ public class AccountsController implements SectionController {
         int rowIndex = 0;
         for (Account account : accounts) {
             Label label = new LabelBuilder().text(account.getTitle()).width(200).build();
-            label.setContextMenu(getContextMenu(account));
             Label point = new Label();
             accountIdPointLabelMap.put(account.getId(), point);
             label.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> showAccount(account));
@@ -102,16 +138,15 @@ public class AccountsController implements SectionController {
         if (account != null) {
             accountIdPointLabelMap.get(account.getId()).setText("* ");
         }
-    }
 
-    private ContextMenu getContextMenu(Account account) {
-        ContextMenu contextMenu = new ContextMenu();
-
-        MenuItem editItem = new MenuItem("Edit");
-        editItem.setOnAction(event1 -> openAccountEditDialog(account));
-        contextMenu.getItems().add(editItem);
-
-        return contextMenu;
+        replenishButton.setVisible(account != null);
+        withdrawButton.setVisible(account != null);
+        editButton.setVisible(account != null);
+        if (account != null) {
+            replenishButton.setOnAction(event -> openReplenishmentEditDialog(null, account));
+            withdrawButton.setOnAction(event -> openWithdrawalEditDialog(null, account));
+            editButton.setOnAction(event -> openAccountEditDialog(account));
+        }
     }
 
     private void showOperations(Account account) {
@@ -127,5 +162,34 @@ public class AccountsController implements SectionController {
         fromColumn.setCellValueFactory(new PropertyValueFactory<>("fromString"));
         toColumn.setCellValueFactory(new PropertyValueFactory<>("toString"));
         commentColumn.setCellValueFactory(new PropertyValueFactory<>("comment"));
+
+        TableUtils.adjustRows(operationTable, (operation, control) -> {
+            control.setContextMenu(getContextMenu(operation));
+
+            if (operation instanceof Withdrawal) {
+                control.setStyle(Styler.getColorfullStyle(BACKGROUND, ORANGE));
+            } else if (operation instanceof Replenishment) {
+                control.setStyle(Styler.getColorfullStyle(BACKGROUND, SCREAMING_GREEN));
+            }
+        });
+    }
+
+    private ContextMenu getContextMenu(Operation operation) {
+        ContextMenu contextMenu = new ContextMenu();
+
+        MenuItem editItem = new MenuItem("Edit");
+        editItem.setOnAction(event -> {
+            if (operation instanceof Replenishment) {
+                Replenishment replenishment = (Replenishment) operation;
+                openReplenishmentEditDialog(replenishment, replenishment.getTo());
+            }
+            if (operation instanceof Withdrawal) {
+                Withdrawal withdrawal = (Withdrawal) operation;
+                openWithdrawalEditDialog(withdrawal, withdrawal.getFrom());
+            }
+        });
+        contextMenu.getItems().add(editItem);
+
+        return contextMenu;
     }
 }
