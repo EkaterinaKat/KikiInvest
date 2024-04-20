@@ -1,4 +1,4 @@
-package org.katyshevtseva.invest.core.service;
+package org.katyshevtseva.invest.core;
 
 import com.katyshevtseva.date.DateUtils;
 
@@ -19,4 +19,6 @@ public interface Operation {
     default String getDateString() {
         return DateUtils.READABLE_DATE_FORMAT.format(getDate());
     }
+
+    OperationType getType();
 }

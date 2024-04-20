@@ -24,9 +24,9 @@ public class ViewConstants {
 
     @Getter
     public enum InvestNodeInfo implements WindowBuilder.NodeInfo {
-        ASSETS("/fxml/assets/main_assets.fxml"),
-        LOCATIONS("/fxml/locations/locations.fxml"),
-        ACCOUNTS("/fxml/accounts/accounts.fxml");
+        ASSETS("/fxml/main_assets.fxml"),
+        LOCATIONS("/fxml/locations.fxml"),
+        ACCOUNTS("/fxml/accounts.fxml");
 
         private final String fullFileName;
 

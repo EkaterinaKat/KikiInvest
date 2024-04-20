@@ -2,10 +2,13 @@ package org.katyshevtseva.invest.core.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.katyshevtseva.invest.core.service.Operation;
+import org.katyshevtseva.invest.core.Operation;
+import org.katyshevtseva.invest.core.OperationType;
 
 import javax.persistence.*;
 import java.util.Date;
+
+import static org.katyshevtseva.invest.core.OperationType.SALE;
 
 @Data
 @Entity
@@ -39,5 +42,10 @@ public class Sale implements Operation {
     @Override
     public String getToString() {
         return to.getTitle();
+    }
+
+    @Override
+    public OperationType getType() {
+        return SALE;
     }
 }

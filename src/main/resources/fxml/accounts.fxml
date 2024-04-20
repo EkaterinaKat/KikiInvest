@@ -29,11 +29,12 @@
                     <Pane minHeight="20" maxHeight="20"/>
                     <TableView fx:id="operationTable">
                         <columns>
+                            <TableColumn prefWidth="100" text="type" fx:id="typeColumn"/>
                             <TableColumn prefWidth="100" text="date" fx:id="dateColumn"/>
                             <TableColumn prefWidth="100" text="amount" fx:id="amountColumn"/>
                             <TableColumn prefWidth="200" text="from" fx:id="fromColumn"/>
                             <TableColumn prefWidth="200" text="to" fx:id="toColumn"/>
-                            <TableColumn prefWidth="400" text="comment" fx:id="commentColumn"/>
+                            <TableColumn prefWidth="300" text="comment" fx:id="commentColumn"/>
                         </columns>
                     </TableView>
                 </VBox>

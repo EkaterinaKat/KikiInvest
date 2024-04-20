@@ -2,10 +2,13 @@ package org.katyshevtseva.invest.core.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.katyshevtseva.invest.core.service.Operation;
+import org.katyshevtseva.invest.core.Operation;
+import org.katyshevtseva.invest.core.OperationType;
 
 import javax.persistence.*;
 import java.util.Date;
+
+import static org.katyshevtseva.invest.core.OperationType.PAYMENT;
 
 @Data
 @Entity
@@ -49,5 +52,10 @@ public class Payment implements Operation {
                 ", finalPayment=" + finalPayment +
                 ", to=" + to +
                 ", comment=" + comment;
+    }
+
+    @Override
+    public OperationType getType() {
+        return PAYMENT;
     }
 }

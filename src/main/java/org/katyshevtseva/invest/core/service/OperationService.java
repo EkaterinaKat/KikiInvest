@@ -1,6 +1,7 @@
 package org.katyshevtseva.invest.core.service;
 
 import org.katyshevtseva.invest.core.Dao;
+import org.katyshevtseva.invest.core.Operation;
 import org.katyshevtseva.invest.core.entity.Account;
 
 import java.util.ArrayList;

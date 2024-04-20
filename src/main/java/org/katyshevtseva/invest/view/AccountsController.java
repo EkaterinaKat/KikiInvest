@@ -12,6 +12,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import org.katyshevtseva.invest.core.Operation;
+import org.katyshevtseva.invest.core.OperationType;
 import org.katyshevtseva.invest.core.entity.Account;
 import org.katyshevtseva.invest.core.entity.Location;
 import org.katyshevtseva.invest.core.entity.Replenishment;
@@ -45,6 +47,8 @@ public class AccountsController implements SectionController {
     private TableColumn<Operation, String> toColumn;
     @FXML
     private TableColumn<Operation, String> commentColumn;
+    @FXML
+    private TableColumn<Operation, OperationType> typeColumn;
     @FXML
     private Button replenishButton;
     @FXML
@@ -162,14 +166,17 @@ public class AccountsController implements SectionController {
         fromColumn.setCellValueFactory(new PropertyValueFactory<>("fromString"));
         toColumn.setCellValueFactory(new PropertyValueFactory<>("toString"));
         commentColumn.setCellValueFactory(new PropertyValueFactory<>("comment"));
+        typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
 
         TableUtils.adjustRows(operationTable, (operation, control) -> {
             control.setContextMenu(getContextMenu(operation));
 
-            if (operation instanceof Withdrawal) {
-                control.setStyle(Styler.getColorfullStyle(BACKGROUND, ORANGE));
-            } else if (operation instanceof Replenishment) {
-                control.setStyle(Styler.getColorfullStyle(BACKGROUND, SCREAMING_GREEN));
+            switch (operation.getType()) {
+                case WITHDRAWAL:
+                    control.setStyle(Styler.getColorfullStyle(BACKGROUND, ORANGE));
+                    break;
+                case REPLENISHMENT:
+                    control.setStyle(Styler.getColorfullStyle(BACKGROUND, SCREAMING_GREEN));
             }
         });
     }
@@ -179,11 +186,11 @@ public class AccountsController implements SectionController {
 
         MenuItem editItem = new MenuItem("Edit");
         editItem.setOnAction(event -> {
-            if (operation instanceof Replenishment) {
+            if (operation.getType() == OperationType.REPLENISHMENT) {
                 Replenishment replenishment = (Replenishment) operation;
                 openReplenishmentEditDialog(replenishment, replenishment.getTo());
             }
-            if (operation instanceof Withdrawal) {
+            if (operation.getType() == OperationType.WITHDRAWAL) {
                 Withdrawal withdrawal = (Withdrawal) operation;
                 openWithdrawalEditDialog(withdrawal, withdrawal.getFrom());
             }
