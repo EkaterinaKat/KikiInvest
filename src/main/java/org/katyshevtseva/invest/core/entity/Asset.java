@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import org.katyshevtseva.invest.core.AssetType;
 
 import javax.persistence.*;
-import java.util.Date;
 import java.util.List;
 
 @Data
@@ -19,31 +18,27 @@ public class Asset {
 
     private String title;
 
+    @Enumerated(EnumType.STRING)
+    private AssetType type;
+
     @ManyToOne
     @JoinColumn(name = "location_id")
     private Location location;
 
-    private Float purchasePrice;
+    @OneToOne(mappedBy = "to")
+    private Purchase purchase;
 
-    @Temporal(TemporalType.DATE)
-    private Date purchaseDate;
-
-    private boolean sold;
-
-    private String comment;
-
-    @Enumerated(EnumType.STRING)
-    private AssetType type;
+    @OneToOne(mappedBy = "from")
+    private Sale sale;
 
     @OneToMany(mappedBy = "from", fetch = FetchType.EAGER)
     private List<Payment> payments;
 
-    public void setValues(String title, Location location, Float purchasePrice,
-                          Date purchaseDate, String comment, AssetType type) {
+    private String comment;
+
+    public void setValues(String title, Location location, String comment, AssetType type) {
         this.title = title;
         this.location = location;
-        this.purchasePrice = purchasePrice;
-        this.purchaseDate = purchaseDate;
         this.comment = comment;
         this.type = type;
     }
@@ -51,20 +46,10 @@ public class Asset {
     public String getFullInfo() {
         StringBuilder result = new StringBuilder(title + "\n" +
                 "type=" + type + "\n" +
-                "location=" + location + "\n" +
-                "purchasePrice=" + purchasePrice + "\n" +
-                "purchaseDate=" + purchaseDate + "\n" +
-                "sold=" + sold + "\n");
+                "location=" + location);
 
         if (!GeneralUtils.isEmpty(comment)) {
-            result.append("comment=").append(comment).append("\n");
-        }
-
-        if (!GeneralUtils.isEmpty(payments)) {
-            result.append("payments=").append("\n");
-            for (Payment payment : payments) {
-                result.append(payment.getInfoForAsset()).append("\n");
-            }
+            result.append("\n").append("comment=").append(comment);
         }
 
         return result.toString();

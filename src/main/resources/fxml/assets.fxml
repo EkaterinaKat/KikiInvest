@@ -29,7 +29,15 @@
                     </columns>
                 </TableView>
                 <Pane minWidth="10" maxWidth="10"/>
-                <VBox fx:id="detailBox"/>
+                <VBox>
+                    <VBox fx:id="detailBox"/>
+                    <Pane minHeight="20" maxHeight="20"/>
+                    <Button fx:id="editButton" text="Edit" visible="false"/>
+                    <Pane minHeight="15" maxHeight="15"/>
+                    <Button fx:id="sellButton" text="Sell" visible="false"/>
+                    <Pane minHeight="15" maxHeight="15"/>
+                    <Button fx:id="addPaymentButton" text="Add payment" visible="false"/>
+                </VBox>
             </HBox>
 
         </VBox>

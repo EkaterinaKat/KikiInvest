@@ -18,6 +18,6 @@ public class OperationService {
         operations.addAll(Dao.findSalesByAccount(account));
         operations.addAll(Dao.findWithdrawalsByAccount(account));
         operations.addAll(Dao.findPurchasesByAccount(account));
-        return operations.stream().sorted(Comparator.comparing(Operation::getDate)).collect(Collectors.toList());
+        return operations.stream().sorted(Comparator.comparing(Operation::getDate).reversed()).collect(Collectors.toList());
     }
 }

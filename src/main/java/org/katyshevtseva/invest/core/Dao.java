@@ -52,4 +52,16 @@ public class Dao {
     public static List<Purchase> findPurchasesByAccount(Account account) {
         return coreDao.find(Purchase.class, Restrictions.eq("from", account));
     }
+
+    public static List<Sale> findSalesByAsset(Asset asset) {
+        return coreDao.find(Sale.class, Restrictions.eq("from", asset));
+    }
+
+    public static Asset findAssetById(Long id) {
+        List<Asset> assets = coreDao.findBy(Asset.class, "id", id);
+        if (assets.size() != 1) {
+            throw new RuntimeException();
+        }
+        return assets.get(0);
+    }
 }

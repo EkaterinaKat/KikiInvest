@@ -173,9 +173,12 @@ public class AccountsController implements SectionController {
 
             switch (operation.getType()) {
                 case WITHDRAWAL:
+                case PURCHASE:
                     control.setStyle(Styler.getColorfullStyle(BACKGROUND, ORANGE));
                     break;
                 case REPLENISHMENT:
+                case SALE:
+                case PAYMENT:
                     control.setStyle(Styler.getColorfullStyle(BACKGROUND, SCREAMING_GREEN));
             }
         });

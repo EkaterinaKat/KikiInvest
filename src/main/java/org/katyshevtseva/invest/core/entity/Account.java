@@ -45,4 +45,9 @@ public class Account {
     public String getFullInfo() {
         return String.format("%s (%s)\n * %.2f * ", title, location.getTitle(), amount);
     }
+
+    @Override
+    public String toString() {
+        return title;
+    }
 }

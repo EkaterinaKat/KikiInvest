@@ -26,8 +26,6 @@ public class Payment implements Operation {
 
     private Float amount;
 
-    private Boolean finalPayment;
-
     @ManyToOne
     @JoinColumn(name = "from_id")
     private Asset from;
@@ -35,6 +33,14 @@ public class Payment implements Operation {
     @ManyToOne
     @JoinColumn(name = "to_id")
     private Account to;
+
+    public Payment(String comment, Date date, Float amount, Asset from, Account to) {
+        this.comment = comment;
+        this.date = date;
+        this.amount = amount;
+        this.from = from;
+        this.to = to;
+    }
 
     @Override
     public String getFromString() {
@@ -49,7 +55,6 @@ public class Payment implements Operation {
     public String getInfoForAsset() {
         return "date=" + date +
                 ", amount=" + amount +
-                ", finalPayment=" + finalPayment +
                 ", to=" + to +
                 ", comment=" + comment;
     }

@@ -34,6 +34,14 @@ public class Sale implements Operation {
     @JoinColumn(name = "to_id")
     private Account to;
 
+    public Sale(Date date, Float amount, String comment, Asset from, Account to) {
+        this.date = date;
+        this.amount = amount;
+        this.comment = comment;
+        this.from = from;
+        this.to = to;
+    }
+
     @Override
     public String getFromString() {
         return from.getTitle();
