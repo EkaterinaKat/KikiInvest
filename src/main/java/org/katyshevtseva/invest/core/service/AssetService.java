@@ -2,6 +2,8 @@ package org.katyshevtseva.invest.core.service;
 
 import org.katyshevtseva.invest.core.AssetType;
 import org.katyshevtseva.invest.core.Dao;
+import org.katyshevtseva.invest.core.Operation;
+import org.katyshevtseva.invest.core.OperationType;
 import org.katyshevtseva.invest.core.entity.*;
 
 import java.util.Date;
@@ -23,6 +25,22 @@ public class AssetService {
         Dao.saveNew(purchase);
 
         AccountCalculationService.recalculate(purchaseAccount);
+    }
+
+    public static void editPurchase(Purchase purchase, Float purchasePrice, Date purchaseDate, String comment,
+                                    Account purchaseAccount) {
+        Account originalAccount = purchase.getFrom();
+
+        purchase.setAmount(purchasePrice);
+        purchase.setDate(purchaseDate);
+        purchase.setComment(comment);
+        purchase.setFrom(purchaseAccount);
+        Dao.saveEdited(purchase);
+
+        AccountCalculationService.recalculate(purchaseAccount);
+        if (!originalAccount.equals(purchaseAccount)) {
+            AccountCalculationService.recalculate(originalAccount);
+        }
     }
 
     public static void edit(Asset asset, String title, Location location, String comment) {
@@ -56,5 +74,36 @@ public class AssetService {
 
     public static Asset getUpdated(Asset asset) {
         return Dao.findAssetById(asset.getId());
+    }
+
+    public static void deleteOperation(Operation operation) {
+        OperationType type = operation.getType();
+
+        if (type == OperationType.PURCHASE) {
+            throw new RuntimeException();
+        }
+
+        switch (type) {
+            case PAYMENT:
+                Payment payment = (Payment) operation;
+                Dao.delete(payment);
+                AccountCalculationService.recalculate(payment.getTo());
+                break;
+            case SALE:
+                Sale sale = (Sale) operation;
+                Dao.delete(sale);
+                AccountCalculationService.recalculate(sale.getTo());
+                break;
+            case REPLENISHMENT:
+                Replenishment replenishment = (Replenishment) operation;
+                Dao.delete(replenishment);
+                AccountCalculationService.recalculate(replenishment.getTo());
+                break;
+            case WITHDRAWAL:
+                Withdrawal withdrawal = (Withdrawal) operation;
+                Dao.delete(withdrawal);
+                AccountCalculationService.recalculate(withdrawal.getFrom());
+                break;
+        }
     }
 }

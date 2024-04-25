@@ -3,7 +3,7 @@ package org.katyshevtseva.invest.view;
 import com.katyshevtseva.fx.LabelBuilder;
 import com.katyshevtseva.fx.Styler;
 import com.katyshevtseva.fx.TableUtils;
-import com.katyshevtseva.fx.dialogconstructor.*;
+import com.katyshevtseva.fx.dialog.StandardDialogBuilder;
 import com.katyshevtseva.fx.switchcontroller.SectionController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,10 +15,12 @@ import javafx.scene.layout.GridPane;
 import org.katyshevtseva.invest.core.Operation;
 import org.katyshevtseva.invest.core.OperationType;
 import org.katyshevtseva.invest.core.entity.Account;
-import org.katyshevtseva.invest.core.entity.Location;
+import org.katyshevtseva.invest.core.entity.Purchase;
 import org.katyshevtseva.invest.core.entity.Replenishment;
 import org.katyshevtseva.invest.core.entity.Withdrawal;
-import org.katyshevtseva.invest.core.service.*;
+import org.katyshevtseva.invest.core.service.AccountService;
+import org.katyshevtseva.invest.core.service.AssetService;
+import org.katyshevtseva.invest.core.service.OperationService;
 
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +29,7 @@ import java.util.Map;
 import static com.katyshevtseva.fx.Styler.StandardColor.ORANGE;
 import static com.katyshevtseva.fx.Styler.StandardColor.SCREAMING_GREEN;
 import static com.katyshevtseva.fx.Styler.ThingToColor.BACKGROUND;
+import static org.katyshevtseva.invest.view.DialogUtil.*;
 
 public class AccountsController implements SectionController {
     @FXML
@@ -59,7 +62,7 @@ public class AccountsController implements SectionController {
 
     @FXML
     private void initialize() {
-        addAccountButton.setOnAction(event -> openAccountEditDialog(null));
+        addAccountButton.setOnAction(event -> openAccountEditDialog(null, () -> fillAccountTable(null)));
         fillAccountTable(null);
         adjustOperationTable();
     }
@@ -67,46 +70,6 @@ public class AccountsController implements SectionController {
     @Override
     public void update() {
         fillAccountTable(null);
-    }
-
-    private void openReplenishmentEditDialog(Replenishment replenishment, Account account) {
-        boolean newReplenishment = replenishment == null;
-
-        DcTextArea commentField = new DcTextArea(false, newReplenishment ? "" : replenishment.getComment());
-        DcDatePicker datePicker = new DcDatePicker(true, newReplenishment ? null : replenishment.getDate());
-        DcFloatNumField amountField = new DcFloatNumField(true, newReplenishment ? null : replenishment.getAmount());
-
-        DialogConstructor.constructDialog(() -> {
-            ReplenishmentService.save(replenishment, datePicker.getValue(), amountField.getValue(),
-                    commentField.getValue(), account);
-            fillAccountTable(account);
-        }, datePicker, amountField, commentField);
-    }
-
-    private void openWithdrawalEditDialog(Withdrawal withdrawal, Account account) {
-        boolean newWithdrawal = withdrawal == null;
-
-        DcTextArea commentField = new DcTextArea(false, newWithdrawal ? "" : withdrawal.getComment());
-        DcDatePicker datePicker = new DcDatePicker(true, newWithdrawal ? null : withdrawal.getDate());
-        DcFloatNumField amountField = new DcFloatNumField(true, newWithdrawal ? null : withdrawal.getAmount());
-
-        DialogConstructor.constructDialog(() -> {
-            WithdrawalService.save(withdrawal, datePicker.getValue(), amountField.getValue(),
-                    commentField.getValue(), account);
-            fillAccountTable(account);
-        }, datePicker, amountField, commentField);
-    }
-
-    private void openAccountEditDialog(Account account) {
-        boolean newAccount = account == null;
-        DcTextField titleField = new DcTextField(true, newAccount ? "" : account.getTitle(), "title");
-        DcComboBox<Location> locationDcComboBox = new DcComboBox<>(true, newAccount ? null : account.getLocation(),
-                LocationService.getLocations());
-
-        DialogConstructor.constructDialog(() -> {
-            AccountService.save(account, titleField.getValue(), locationDcComboBox.getValue());
-            fillAccountTable(account);
-        }, titleField, locationDcComboBox);
     }
 
     private void fillAccountTable(Account accountToShow) {
@@ -147,9 +110,15 @@ public class AccountsController implements SectionController {
         withdrawButton.setVisible(account != null);
         editButton.setVisible(account != null);
         if (account != null) {
-            replenishButton.setOnAction(event -> openReplenishmentEditDialog(null, account));
-            withdrawButton.setOnAction(event -> openWithdrawalEditDialog(null, account));
-            editButton.setOnAction(event -> openAccountEditDialog(account));
+
+            replenishButton.setOnAction(event -> openReplenishmentEditDialog(null, account,
+                    () -> fillAccountTable(account)));
+
+            withdrawButton.setOnAction(event -> openWithdrawalEditDialog(null, account,
+                    () -> fillAccountTable(account)));
+
+            editButton.setOnAction(event -> openAccountEditDialog(account,
+                    () -> fillAccountTable(account)));
         }
     }
 
@@ -186,19 +155,41 @@ public class AccountsController implements SectionController {
 
     private ContextMenu getContextMenu(Operation operation) {
         ContextMenu contextMenu = new ContextMenu();
+        OperationType type = operation.getType();
 
-        MenuItem editItem = new MenuItem("Edit");
-        editItem.setOnAction(event -> {
-            if (operation.getType() == OperationType.REPLENISHMENT) {
-                Replenishment replenishment = (Replenishment) operation;
-                openReplenishmentEditDialog(replenishment, replenishment.getTo());
-            }
-            if (operation.getType() == OperationType.WITHDRAWAL) {
-                Withdrawal withdrawal = (Withdrawal) operation;
-                openWithdrawalEditDialog(withdrawal, withdrawal.getFrom());
-            }
-        });
-        contextMenu.getItems().add(editItem);
+        if (type != OperationType.SALE && type != OperationType.PAYMENT) {
+            MenuItem editItem = new MenuItem("Edit");
+            editItem.setOnAction(event -> {
+                if (type == OperationType.REPLENISHMENT) {
+                    Replenishment replenishment = (Replenishment) operation;
+                    Account account = replenishment.getTo();
+                    openReplenishmentEditDialog(replenishment, account, () -> fillAccountTable(account));
+                }
+                if (type == OperationType.WITHDRAWAL) {
+                    Withdrawal withdrawal = (Withdrawal) operation;
+                    Account account = withdrawal.getFrom();
+                    openWithdrawalEditDialog(withdrawal, account, () -> fillAccountTable(account));
+                }
+                if (type == OperationType.PURCHASE) {
+                    Purchase purchase = (Purchase) operation;
+                    openPurchaseEditDialog(purchase, () -> fillAccountTable(purchase.getFrom()));
+                }
+            });
+            contextMenu.getItems().add(editItem);
+        }
+
+        if (type != OperationType.PURCHASE) {
+            MenuItem deleteItem = new MenuItem("Delete");
+            deleteItem.setOnAction(event -> {
+                new StandardDialogBuilder().openQuestionDialog("Delete?", answer -> {
+                    if (answer) {
+                        AssetService.deleteOperation(operation);
+                        fillAccountTable(null);
+                    }
+                });
+            });
+            contextMenu.getItems().add(deleteItem);
+        }
 
         return contextMenu;
     }
