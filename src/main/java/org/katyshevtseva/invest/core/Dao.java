@@ -37,6 +37,10 @@ public class Dao {
         return coreDao.find(Payment.class, Restrictions.eq("to", account));
     }
 
+    public static List<Payment> findPaymentsByAsset(Asset asset) {
+        return coreDao.find(Payment.class, Restrictions.eq("from", asset));
+    }
+
     public static List<Replenishment> findReplenishmentsByAccount(Account account) {
         return coreDao.find(Replenishment.class, Restrictions.eq("to", account));
     }

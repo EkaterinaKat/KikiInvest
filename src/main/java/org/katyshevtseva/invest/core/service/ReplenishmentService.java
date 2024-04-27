@@ -20,6 +20,6 @@ public class ReplenishmentService {
             existing.setValues(date, amount, comment, to);
             Dao.saveEdited(existing);
         }
-        AccountCalculationService.recalculate(to);
+        AccountCalculationService.updateAccountAmount(to);
     }
 }

@@ -28,7 +28,7 @@ public class AssetService {
         Purchase purchase = new Purchase(purchaseDate, purchasePrice, purchaseComment, purchaseAccount, asset);
         Dao.saveNew(purchase);
 
-        AccountCalculationService.recalculate(purchaseAccount);
+        AccountCalculationService.updateAccountAmount(purchaseAccount);
     }
 
     public static void editPurchase(Purchase purchase, Float purchasePrice, Date purchaseDate, String comment,
@@ -41,9 +41,9 @@ public class AssetService {
         purchase.setFrom(purchaseAccount);
         Dao.saveEdited(purchase);
 
-        AccountCalculationService.recalculate(purchaseAccount);
+        AccountCalculationService.updateAccountAmount(purchaseAccount);
         if (!originalAccount.equals(purchaseAccount)) {
-            AccountCalculationService.recalculate(originalAccount);
+            AccountCalculationService.updateAccountAmount(originalAccount);
         }
     }
 
@@ -60,7 +60,7 @@ public class AssetService {
         }
 
         Dao.saveNew(new Sale(saleDate, salePrise, comment, asset, account));
-        AccountCalculationService.recalculate(account);
+        AccountCalculationService.updateAccountAmount(account);
     }
 
     public static boolean isSold(Asset asset) {
@@ -73,7 +73,7 @@ public class AssetService {
         }
 
         Dao.saveNew(new Payment(comment, saleDate, amount, asset, account));
-        AccountCalculationService.recalculate(account);
+        AccountCalculationService.updateAccountAmount(account);
     }
 
     public static Asset getUpdated(Asset asset) {
@@ -91,22 +91,22 @@ public class AssetService {
             case PAYMENT:
                 Payment payment = (Payment) operation;
                 Dao.delete(payment);
-                AccountCalculationService.recalculate(payment.getTo());
+                AccountCalculationService.updateAccountAmount(payment.getTo());
                 break;
             case SALE:
                 Sale sale = (Sale) operation;
                 Dao.delete(sale);
-                AccountCalculationService.recalculate(sale.getTo());
+                AccountCalculationService.updateAccountAmount(sale.getTo());
                 break;
             case REPLENISHMENT:
                 Replenishment replenishment = (Replenishment) operation;
                 Dao.delete(replenishment);
-                AccountCalculationService.recalculate(replenishment.getTo());
+                AccountCalculationService.updateAccountAmount(replenishment.getTo());
                 break;
             case WITHDRAWAL:
                 Withdrawal withdrawal = (Withdrawal) operation;
                 Dao.delete(withdrawal);
-                AccountCalculationService.recalculate(withdrawal.getFrom());
+                AccountCalculationService.updateAccountAmount(withdrawal.getFrom());
                 break;
         }
     }

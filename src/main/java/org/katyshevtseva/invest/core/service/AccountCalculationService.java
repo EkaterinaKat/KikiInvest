@@ -5,8 +5,12 @@ import org.katyshevtseva.invest.core.entity.*;
 
 public class AccountCalculationService {
 
-    public static void recalculate(Account account) {
+    public static void updateAccountAmount(Account account) {
+        account.setAmount(calculateAccountSum(account));
+        Dao.saveEdited(account);
+    }
 
+    public static Float calculateAccountSum(Account account) {
         Double amount = 0.0;
 
         for (Replenishment replenishment : Dao.findReplenishmentsByAccount(account)) {
@@ -25,7 +29,6 @@ public class AccountCalculationService {
             amount -= purchase.getAmount();
         }
 
-        account.setAmount(amount.floatValue());
-        Dao.saveEdited(account);
+        return amount.floatValue();
     }
 }

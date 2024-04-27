@@ -20,6 +20,6 @@ public class WithdrawalService {
             existing.setValues(date, amount, comment, from);
             Dao.saveEdited(existing);
         }
-        AccountCalculationService.recalculate(from);
+        AccountCalculationService.updateAccountAmount(from);
     }
 }
