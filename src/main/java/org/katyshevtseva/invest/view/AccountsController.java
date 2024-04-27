@@ -12,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import org.jetbrains.annotations.Nullable;
 import org.katyshevtseva.invest.core.Operation;
 import org.katyshevtseva.invest.core.OperationType;
 import org.katyshevtseva.invest.core.entity.Account;
@@ -59,21 +60,21 @@ public class AccountsController implements SectionController {
     @FXML
     private Button editButton;
     private Map<Long, Label> accountIdPointLabelMap;
+    private Account shownAccount;
 
     @FXML
     private void initialize() {
-        addAccountButton.setOnAction(event -> openAccountEditDialog(null, () -> fillAccountTable(null)));
-        fillAccountTable(null);
+        addAccountButton.setOnAction(event -> openAccountEditDialog(null, this::fillAccountTable));
+        fillAccountTable();
         adjustOperationTable();
     }
 
     @Override
     public void update() {
-        fillAccountTable(null);
+        updateShownAccount();
     }
 
-    private void fillAccountTable(Account accountToShow) {
-        boolean accountToShowWasShowed = false;
+    private void fillAccountTable() {
         accountsPane.getChildren().clear();
         List<Account> accounts = AccountService.getAccounts();
         accountIdPointLabelMap = new HashMap<>();
@@ -86,18 +87,17 @@ public class AccountsController implements SectionController {
             accountsPane.add(point, 0, rowIndex);
             accountsPane.add(label, 1, rowIndex);
             rowIndex++;
-
-            if (account.equals(accountToShow)) {
-                showAccount(account);
-                accountToShowWasShowed = true;
-            }
-        }
-        if (!accountToShowWasShowed) {
-            showAccount(null);
         }
     }
 
-    private void showAccount(Account account) {
+    private void updateShownAccount() {
+        if (shownAccount != null) {
+            showAccount(AccountService.getUpdated(shownAccount));
+        }
+    }
+
+    private void showAccount(@Nullable Account account) {
+        shownAccount = account;
         infoLabel.setText(account != null ? account.getFullInfo() : "");
         showOperations(account);
 
@@ -112,13 +112,12 @@ public class AccountsController implements SectionController {
         if (account != null) {
 
             replenishButton.setOnAction(event -> openReplenishmentEditDialog(null, account,
-                    () -> fillAccountTable(account)));
+                    this::updateShownAccount));
 
             withdrawButton.setOnAction(event -> openWithdrawalEditDialog(null, account,
-                    () -> fillAccountTable(account)));
+                    this::updateShownAccount));
 
-            editButton.setOnAction(event -> openAccountEditDialog(account,
-                    () -> fillAccountTable(account)));
+            editButton.setOnAction(event -> openAccountEditDialog(account, this::updateShownAccount));
         }
     }
 
@@ -163,16 +162,16 @@ public class AccountsController implements SectionController {
                 if (type == OperationType.REPLENISHMENT) {
                     Replenishment replenishment = (Replenishment) operation;
                     Account account = replenishment.getTo();
-                    openReplenishmentEditDialog(replenishment, account, () -> fillAccountTable(account));
+                    openReplenishmentEditDialog(replenishment, account, this::updateShownAccount);
                 }
                 if (type == OperationType.WITHDRAWAL) {
                     Withdrawal withdrawal = (Withdrawal) operation;
                     Account account = withdrawal.getFrom();
-                    openWithdrawalEditDialog(withdrawal, account, () -> fillAccountTable(account));
+                    openWithdrawalEditDialog(withdrawal, account, this::updateShownAccount);
                 }
                 if (type == OperationType.PURCHASE) {
                     Purchase purchase = (Purchase) operation;
-                    openPurchaseEditDialog(purchase, () -> fillAccountTable(purchase.getFrom()));
+                    openPurchaseEditDialog(purchase, this::updateShownAccount);
                 }
             });
             contextMenu.getItems().add(editItem);
@@ -180,14 +179,12 @@ public class AccountsController implements SectionController {
 
         if (type != OperationType.PURCHASE) {
             MenuItem deleteItem = new MenuItem("Delete");
-            deleteItem.setOnAction(event -> {
-                new StandardDialogBuilder().openQuestionDialog("Delete?", answer -> {
-                    if (answer) {
-                        AssetService.deleteOperation(operation);
-                        fillAccountTable(null);
-                    }
-                });
-            });
+            deleteItem.setOnAction(event -> new StandardDialogBuilder().openQuestionDialog("Delete?", answer -> {
+                if (answer) {
+                    AssetService.deleteOperation(operation);
+                    updateShownAccount();
+                }
+            }));
             contextMenu.getItems().add(deleteItem);
         }
 

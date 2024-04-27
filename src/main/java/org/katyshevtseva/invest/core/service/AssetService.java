@@ -6,13 +6,17 @@ import org.katyshevtseva.invest.core.Operation;
 import org.katyshevtseva.invest.core.OperationType;
 import org.katyshevtseva.invest.core.entity.*;
 
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class AssetService {
 
     public static List<Asset> getAssets() {
-        return Dao.getAllAssets();
+        return Dao.getAllAssets().stream()
+                .sorted(Comparator.comparing(AssetService::isSold).thenComparing(asset -> asset.getType().getOrder()))
+                .collect(Collectors.toList());
     }
 
     public static void saveNew(String title, Location location, Float purchasePrice, Date purchaseDate,

@@ -31,7 +31,7 @@ public class Asset {
     @OneToOne(mappedBy = "from")
     private Sale sale;
 
-    @OneToMany(mappedBy = "from", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "from")
     private List<Payment> payments;
 
     private String comment;
@@ -49,9 +49,20 @@ public class Asset {
                 "location=" + location);
 
         if (!GeneralUtils.isEmpty(comment)) {
-            result.append("\n").append("comment=").append(comment);
+            result.append("\n\n").append(comment);
         }
 
         return result.toString();
+    }
+
+    @Override
+    public String toString() {
+        return "Asset{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", type=" + type +
+                ", location=" + location +
+                ", comment='" + comment + '\'' +
+                '}';
     }
 }

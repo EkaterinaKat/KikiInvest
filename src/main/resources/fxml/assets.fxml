@@ -22,10 +22,7 @@
                         <TableColumn prefWidth="150" text="location" fx:id="locationColumn"/>
                         <TableColumn prefWidth="150" text="title" fx:id="titleColumn"/>
                         <TableColumn prefWidth="100" text="type" fx:id="typeColumn"/>
-                        <TableColumn prefWidth="150" text="pur. price" fx:id="purchasePriceColumn"/>
-                        <TableColumn prefWidth="150" text="pur. date" fx:id="purchaseDateColumn"/>
-                        <TableColumn prefWidth="150" text="sold" fx:id="soldColumn"/>
-                        <TableColumn prefWidth="150" text="comment" fx:id="commentColumn"/>
+                        <TableColumn prefWidth="600" text="comment" fx:id="commentColumn"/>
                     </columns>
                 </TableView>
                 <Pane minWidth="10" maxWidth="10"/>

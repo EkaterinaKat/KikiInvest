@@ -97,7 +97,7 @@ public class DialogUtil {
         }, locationDcComboBox, titleField, purchaseCommentField);
     }
 
-    public static void openSellDialog(Asset asset, NoArgsKnob onSave) {
+    public static void openSellCreationDialog(Asset asset, NoArgsKnob onSave) {
         List<Account> accounts = AccountService.getAccounts();
         Account firstAccount = accounts.isEmpty() ? null : accounts.get(0);
         DcComboBox<Account> accountCb = new DcComboBox<>(true, firstAccount, accounts);
@@ -118,12 +118,12 @@ public class DialogUtil {
         }, accountCb, sellPriceField, datePicker, commentField);
     }
 
-    public static void openPaymentDialog(Asset asset, NoArgsKnob onSave) {
+    public static void openPaymentCreationDialog(Asset asset, NoArgsKnob onSave) {
         List<Account> accounts = AccountService.getAccounts();
         Account firstAccount = accounts.isEmpty() ? null : accounts.get(0);
         DcComboBox<Account> accountCb = new DcComboBox<>(true, firstAccount, accounts);
 
-        DcFloatNumField sellPriceField = new DcFloatNumField(true, null, "sell price");
+        DcFloatNumField sellPriceField = new DcFloatNumField(true, null, "payment amount");
         DcDatePicker datePicker = new DcDatePicker(true, new Date());
         DcTextArea commentField = new DcTextArea(false, "", "comment");
 
@@ -139,13 +139,12 @@ public class DialogUtil {
     }
 
     public static void openPurchaseEditDialog(Purchase purchase, NoArgsKnob onSave) {
-        DcFloatNumField purchasePriceField = new DcFloatNumField(true, null, "purchase price");
-        DcDatePicker datePicker = new DcDatePicker(true, new Date());
-        DcTextArea commentField = new DcTextArea(false, "", "comment");
+        DcFloatNumField purchasePriceField = new DcFloatNumField(true, purchase.getAmount(), "purchase price");
+        DcDatePicker datePicker = new DcDatePicker(true, purchase.getDate());
+        DcTextArea commentField = new DcTextArea(false, purchase.getComment(), "comment");
 
         List<Account> accounts = AccountService.getAccounts();
-        Account firstAccount = accounts.isEmpty() ? null : accounts.get(0);
-        DcComboBox<Account> accountCb = new DcComboBox<>(true, firstAccount, accounts);
+        DcComboBox<Account> accountCb = new DcComboBox<>(true, purchase.getFrom(), accounts);
 
         DialogConstructor.constructDialog(() -> {
             AssetService.editPurchase(

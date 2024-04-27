@@ -1,15 +1,18 @@
 package org.katyshevtseva.invest.core;
 
+import lombok.Getter;
+
+@Getter
 public enum AssetType {
-    BOND("#CBB3FF"), SHARE("#FFE5B3"), DEPOSIT("#B3E6FF");
+    BOND("#CBB3FF", 3),
+    SHARE("#FFE5B3", 2),
+    DEPOSIT("#B3E6FF", 1);
 
     private final String color;
+    private final int order;
 
-    AssetType(String color) {
+    AssetType(String color, int order) {
         this.color = color;
-    }
-
-    public String getColor() {
-        return color;
+        this.order = order;
     }
 }

@@ -29,12 +29,6 @@ public class AssetsController implements SectionController {
     @FXML
     private TableColumn<Asset, String> typeColumn;
     @FXML
-    private TableColumn<Asset, String> purchasePriceColumn;
-    @FXML
-    private TableColumn<Asset, String> purchaseDateColumn;
-    @FXML
-    private TableColumn<Asset, String> soldColumn;
-    @FXML
     private TableColumn<Asset, String> commentColumn;
     @FXML
     private TableColumn<Asset, String> titleColumn;
@@ -74,17 +68,19 @@ public class AssetsController implements SectionController {
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         locationColumn.setCellValueFactory(new PropertyValueFactory<>("location"));
         typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
-        purchasePriceColumn.setCellValueFactory(new PropertyValueFactory<>("purchasePrice"));
-        purchaseDateColumn.setCellValueFactory(new PropertyValueFactory<>("purchaseDate"));
-        soldColumn.setCellValueFactory(new PropertyValueFactory<>("sold"));
         commentColumn.setCellValueFactory(new PropertyValueFactory<>("comment"));
     }
 
     private void setupRows() {
         TableUtils.adjustRows(table, (asset, control) -> {
-            control.setStyle(Styler.getColorfullStyle(BACKGROUND, asset.getType().getColor()));
+            control.setStyle(getStyle(asset));
             control.setOnMouseClicked(event -> showDetails(asset));
         });
+    }
+
+    private String getStyle(Asset asset) {
+        return Styler.getColorfullStyle(BACKGROUND,
+                AssetService.isSold(asset) ? Styler.StandardColor.LIGHT_GREY.getCode() : asset.getType().getColor());
     }
 
     private void showDetailsUpdated(Asset asset) {
@@ -105,11 +101,11 @@ public class AssetsController implements SectionController {
             sellButton.setDisable(sold);
             addPaymentButton.setDisable(sold);
 
-            addPaymentButton.setOnMouseClicked(event -> openPaymentDialog(asset, () -> {
+            addPaymentButton.setOnMouseClicked(event -> openPaymentCreationDialog(asset, () -> {
                 updateContent();
                 showDetailsUpdated(asset);
             }));
-            sellButton.setOnMouseClicked(event -> openSellDialog(asset, () -> {
+            sellButton.setOnMouseClicked(event -> openSellCreationDialog(asset, () -> {
                 updateContent();
                 showDetailsUpdated(asset);
             }));

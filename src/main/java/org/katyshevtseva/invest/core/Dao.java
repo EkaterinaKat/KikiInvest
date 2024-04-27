@@ -58,10 +58,10 @@ public class Dao {
     }
 
     public static Asset findAssetById(Long id) {
-        List<Asset> assets = coreDao.findBy(Asset.class, "id", id);
-        if (assets.size() != 1) {
-            throw new RuntimeException();
-        }
-        return assets.get(0);
+        return coreDao.findById(Asset.class, id);
+    }
+
+    public static Account findAccountById(Long id) {
+        return coreDao.findById(Account.class, id);
     }
 }

@@ -21,4 +21,8 @@ public class AccountService {
             Dao.saveEdited(existing);
         }
     }
+
+    public static Account getUpdated(Account account) {
+        return Dao.findAccountById(account.getId());
+    }
 }
